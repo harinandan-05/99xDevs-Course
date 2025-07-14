@@ -15,14 +15,15 @@ backend();
 const UserSchema = new Schema({
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
-  enrolledCourseId: { type: Types.ObjectId, ref: "Course" },
+  enrolledCourseId: [{ type: Types.ObjectId, ref: "Course" }],
 });
 
 const CourseSchema = new Schema({
   title: { type: String, required: true },
   description: { type: String },
   courseId: { type: Types.ObjectId },
-  weeks: { type: Types.ObjectId, ref: "Week" }
+  weeks:[ { type: Types.ObjectId, ref: "Week" }],
+  thumbnailUrl:String,
 });
 
 const PurchaseSchema = new Schema({
@@ -32,7 +33,7 @@ const PurchaseSchema = new Schema({
 
 const LectureSchema = new Schema({
   title: { type: String, required: true },
-  week: { type: Types.ObjectId, ref: "Week", required: true },
+  week: [{ type: Types.ObjectId, ref: "Week", required: true }],
   thumbnailUrl: { type: String },
   notesUrl: { type: String }
 });
@@ -40,7 +41,7 @@ const LectureSchema = new Schema({
 const WeekSchema = new Schema({
   title: { type: String, unique: true, required: true },
   course: { type: Types.ObjectId, ref: "Course" },
-  lecture: { type: Types.ObjectId, ref: "Lecture" }
+  lectures: [{ type: Types.ObjectId, ref: "Lecture" }]
 });
 
 export const User = mongoose.model("User", UserSchema);

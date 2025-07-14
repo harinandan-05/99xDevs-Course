@@ -59,13 +59,14 @@ backend();
 const UserSchema = new mongoose_1.Schema({
     username: { type: String, unique: true, required: true },
     password: { type: String, required: true },
-    enrolledCourseId: { type: mongoose_1.Types.ObjectId, ref: "Course" },
+    enrolledCourseId: [{ type: mongoose_1.Types.ObjectId, ref: "Course" }],
 });
 const CourseSchema = new mongoose_1.Schema({
     title: { type: String, required: true },
     description: { type: String },
     courseId: { type: mongoose_1.Types.ObjectId },
-    weeks: { type: mongoose_1.Types.ObjectId, ref: "Week" }
+    weeks: [{ type: mongoose_1.Types.ObjectId, ref: "Week" }],
+    thumbnailUrl: String,
 });
 const PurchaseSchema = new mongoose_1.Schema({
     username: { type: String, unique: true, required: true },
@@ -73,14 +74,14 @@ const PurchaseSchema = new mongoose_1.Schema({
 });
 const LectureSchema = new mongoose_1.Schema({
     title: { type: String, required: true },
-    week: { type: mongoose_1.Types.ObjectId, ref: "Week", required: true },
+    week: [{ type: mongoose_1.Types.ObjectId, ref: "Week", required: true }],
     thumbnailUrl: { type: String },
     notesUrl: { type: String }
 });
 const WeekSchema = new mongoose_1.Schema({
     title: { type: String, unique: true, required: true },
     course: { type: mongoose_1.Types.ObjectId, ref: "Course" },
-    lecture: { type: mongoose_1.Types.ObjectId, ref: "Lecture" }
+    lectures: [{ type: mongoose_1.Types.ObjectId, ref: "Lecture" }]
 });
 exports.User = mongoose_1.default.model("User", UserSchema);
 exports.Course = mongoose_1.default.model("Course", CourseSchema);
