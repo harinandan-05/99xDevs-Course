@@ -72,7 +72,6 @@ router.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function*
 }));
 router.get("/home", User_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.userId;
-    console.log("userId is", userId); // should be a string
     const Findcourse = yield db_1.User.findById(userId).populate("enrolledCourseId");
     if (!Findcourse) {
         res.status(400).json({ msg: "no contents" });
@@ -83,7 +82,28 @@ router.get("/home", User_1.authMiddleware, (req, res) => __awaiter(void 0, void 
         return;
     }
 }));
-router.post("/course", (req, res) => { });
+router.post("/create-course", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const course = yield db_1.Course.create({
+        title: "Fullstack Web Dev",
+        description: "Learn MERN with projects",
+        thumbnailUrl: "https://example.com/image.png"
+    });
+    res.json({ course });
+}));
+router.get("/courses/:id", User_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const courseId = req.params.id;
+    const Findweek = yield db_1.Course.findById(courseId).populate({
+        path: "weeks",
+        select: "title thumbnailUrl"
+    }).lean();
+    console.log(Findweek);
+    if (!Findweek) {
+        res.status(400).json({ msg: "weeks not found" });
+        return;
+    }
+    res.status(200).json({ msg: "weeks", week: Findweek });
+    return;
+}));
 router.post("/course/week", (req, res) => { });
 router.post("/week/content", (req, res) => { });
 exports.default = router;

@@ -6,25 +6,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authMiddleware = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = require("../routes/config");
-const authMiddleware = function (req, res, next) {
+const authMiddleware = (req, res, next) => {
     const authHeader = req.headers.authorization;
-    console.log("Auth Header:", authHeader); // 👈 Check what's being received
-    if (!authHeader || !authHeader.startsWith("Bearer")) {
-        console.log("Invalid or missing token");
-        res.status(401).json({ message: "token invalid or not available" });
-        return;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({ message: "Token missing or invalid" });
     }
     const token = authHeader.split(" ")[1];
-    console.log("Token received:", token);
     try {
         const decoded = jsonwebtoken_1.default.verify(token, config_1.JWT_SECRET);
-        console.log("Decoded token:", decoded);
         req.userId = decoded.id;
         next();
     }
-    catch (e) {
-        console.log("JWT Error:", e); // 👈 See what error is thrown
-        res.status(401).json({ msg: "error in validation" });
+    catch (err) {
+        console.error("JWT error:", err);
+        return res.status(401).json({ message: "Token verification failed" });
     }
 };
 exports.authMiddleware = authMiddleware;

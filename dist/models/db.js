@@ -81,7 +81,8 @@ const LectureSchema = new mongoose_1.Schema({
 const WeekSchema = new mongoose_1.Schema({
     title: { type: String, unique: true, required: true },
     course: { type: mongoose_1.Types.ObjectId, ref: "Course" },
-    lectures: [{ type: mongoose_1.Types.ObjectId, ref: "Lecture" }]
+    lectures: [{ type: mongoose_1.Types.ObjectId, ref: "Lecture" }],
+    thumbnailUrl: { type: String }
 });
 exports.User = mongoose_1.default.model("User", UserSchema);
 exports.Course = mongoose_1.default.model("Course", CourseSchema);
